@@ -107,7 +107,7 @@ function SimpleBlockStream (opts) {
 
     if (latestCached) {
       // Start after the latest item in the cache
-      fromHash = Buffer.from(deserialize(latestCached).header.getHash())
+      fromHash = Buffer.from(latestCached.header.getHash())
       fromHeight = latestCached.height
     } else {
       // Nothing in the cache, start from a checkpoint or the genesis block
