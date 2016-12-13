@@ -31,7 +31,6 @@ function SimpleBlockStream (opts) {
   if (!(this instanceof SimpleBlockStream)) return new SimpleBlockStream(opts)
 
   assert(typeof opts.db !== 'undefined')
-  assert(Array.isArray(opts.addresses))
 
   EventEmitter.call(this)
 
@@ -40,7 +39,7 @@ function SimpleBlockStream (opts) {
   var self = this
 
   self.from = opts.from || 0
-  self.addresses = opts.addresses
+  self.addresses = opts.addresses || []  // TODO if addresses is empty we can just look at headers
   self.params = opts.params || mainnetParams
   self.network = opts.network || bitcoin.network
   self.peers = opts.peers || new PeerGroup(self.params.net)
