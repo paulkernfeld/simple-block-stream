@@ -10,6 +10,7 @@ var debug = require('debug')('simple-block-stream')
 var inherits = require('inherits')
 var mapStream = require('map-stream')
 var assign = require('object-assign')
+var pump = require('pump')
 var sublevel = require('subleveldown')
 var mainnetParams = require('webcoin-bitcoin')
 
@@ -83,7 +84,6 @@ function SimpleBlockStream (opts) {
     })
 
     var blockStream = self.peers.createBlockStream({ filtered: true })
-    chainReadStream.pipe(blockStream)
 
     var serializer = mapStream(function (block, cb) {
       var transactions = []
@@ -96,7 +96,7 @@ function SimpleBlockStream (opts) {
         transactions: transactions
       })
     })
-    blockStream.pipe(serializer)
+    pump(chainReadStream, blockStream, serializer)
 
     cb(null, serializer)
   }
@@ -143,8 +143,7 @@ function SimpleBlockStream (opts) {
 
   self.peers.once('peer', function () {
     var headerStream = self.peers.createHeaderStream()
-    self.chain.createLocatorStream().pipe(headerStream)
-    headerStream.pipe(self.chain.createWriteStream())
+    pump(self.chain.createLocatorStream(), headerStream, self.chain.createWriteStream())
   })
   self.peers.connect()
 

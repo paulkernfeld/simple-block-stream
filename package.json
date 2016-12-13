@@ -25,6 +25,7 @@
     "inherits": "^2.0.1",
     "map-stream": "0.0.6",
     "object-assign": "^4.1.0",
+    "pump": "^1.0.1",
     "subleveldown": "^2.1.0",
     "webcoin-bitcoin": "^3.0.0"
   },

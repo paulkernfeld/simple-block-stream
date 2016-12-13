@@ -4,6 +4,7 @@ var timers = require('timers')
 var bitcoin = require('bitcoinjs-lib')
 var reverse = require('buffer-reverse')
 var mapStream = require('map-stream')
+var pump = require('pump')
 var tape = require('tape')
 
 var SimpleBlockStream = require('..')
@@ -46,6 +47,6 @@ module.exports = function (opts) {
       cb()
     })
 
-    sbs.stream.pipe(checkBlock)
+    pump(sbs.stream, checkBlock)
   })
 }
