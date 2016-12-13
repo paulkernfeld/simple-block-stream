@@ -10,14 +10,21 @@ This library makes it easy to stream blockchains with [webcoin](https://github.c
 
 This library uses [debug](https://github.com/visionmedia/debug); set the env var `DEBUG` to `simple-block-stream` to see debug logs.
 
+Options:
+
+- `db` (required): a LevelUp database
+- `addresses`: an array of addresses to watch (default `[]`)
+- `from`: include blocks starting at this height (default `0`)
+- `params`: the params of the blockchain (default Bitcoin mainnet)
+- `network`: the network of the blockchain (default Bitcoin mainnet)
+- `peer`: the PeerGroup of the blockchain (default Bitcoin mainnet)
+- `json`: if true, produce JSON-serializable objects (default `false`)
+
 ```js
-// import simple-block-stream
 var SimpleBlockStream = require('simple-block-stream')
 
-// create a LevelUp database to store data for simple-block-stream
 var memdb = require('memdb')
 
-// create and start an sbs stream for this address
 var sbs = SimpleBlockStream({
   db: memdb(),
   addresses: ['1LNWw6yCxkUmkhArb2Nf2MPw6vG7u5WG7q']

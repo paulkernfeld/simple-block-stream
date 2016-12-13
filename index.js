@@ -28,6 +28,30 @@ var blockFromObject = function (obj) {
   return assign(new Block(), obj)
 }
 
+var blockToJson = function (block) {
+  var transactions = []
+  block.transactions.forEach(function (transaction) {
+    transactions.push(transaction.toHex())
+  })
+  return {
+    height: block.height,
+    header: block.header.toHex(),
+    transactions: transactions
+  }
+}
+
+var blockFromJson = function (block) {
+  var transactions = []
+  block.transactions.forEach(function (transaction) {
+    transactions.push(Transaction.fromHex(transaction))
+  })
+  return {
+    height: block.height,
+    header: Block.fromHex(block.header),
+    transactions: transactions
+  }
+}
+
 function SimpleBlockStream (opts) {
   if (!(this instanceof SimpleBlockStream)) return new SimpleBlockStream(opts)
 
@@ -44,6 +68,7 @@ function SimpleBlockStream (opts) {
   self.params = opts.params || mainnetParams
   self.network = opts.network || bitcoin.network
   self.peers = opts.peers || new PeerGroup(self.params.net)
+  self.deserialize = opts.json ? undefined : blockFromJson
 
   self.pubkeyHashes = []
   self.addresses.forEach(function (addr) {
@@ -62,18 +87,6 @@ function SimpleBlockStream (opts) {
     self.emit('header', block)
   })
 
-  var deserialize = function (block) {
-    var transactions = []
-    block.transactions.forEach(function (transaction) {
-      transactions.push(Transaction.fromHex(transaction))
-    })
-    return {
-      height: block.height,
-      header: Block.fromHex(block.header),
-      transactions: transactions
-    }
-  }
-
   var makeStream = function (fromHash, cb) {
     debug('starting txs...')
     var chainReadStream = self.chain.createReadStream({ from: fromHash, inclusive: false })
@@ -86,16 +99,9 @@ function SimpleBlockStream (opts) {
     var blockStream = self.peers.createBlockStream({ filtered: true })
 
     var serializer = mapStream(function (block, cb) {
-      var transactions = []
-      block.transactions.forEach(function (transaction) {
-        transactions.push(transaction.toHex())
-      })
-      cb(null, {
-        height: block.height,
-        header: block.header.toHex(),
-        transactions: transactions
-      })
+      cb(null, blockToJson(block))
     })
+
     pump(chainReadStream, blockStream, serializer)
 
     cb(null, serializer)
@@ -132,7 +138,7 @@ function SimpleBlockStream (opts) {
     sublevel(opts.db, 'cache-live-stream', {valueEncoding: 'json'}),
     startStream,
     {
-      deserialize: deserialize,
+      deserialize: self.deserialize,
       keyEncoding: 'hex'
     }
   )
@@ -159,3 +165,5 @@ SimpleBlockStream.prototype.filterElements = function () {
 }
 
 module.exports = SimpleBlockStream
+module.exports.blockToJson = blockToJson
+module.exports.blockFromJson = blockFromJson
