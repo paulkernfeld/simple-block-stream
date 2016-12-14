@@ -69,6 +69,7 @@ function SimpleBlockStream (opts) {
   self.network = opts.network || bitcoin.network
   self.peers = opts.peers || new PeerGroup(self.params.net)
   self.deserialize = opts.json ? undefined : blockFromJson
+  self.filtered = !opts.unfiltered
 
   self.pubkeyHashes = []
   self.addresses.forEach(function (addr) {
@@ -77,8 +78,12 @@ function SimpleBlockStream (opts) {
 
   self.chain = new Blockchain(self.params.blockchain, sublevel(opts.db, 'chain'))
 
-  self.filter = new Filter(self.peers)
-  self.filter.add(self)
+  if (self.filtered) {
+    self.filter = new Filter(self.peers)
+    self.filter.add(self)
+  } else {
+    assert(!self.addresses.length)
+  }
 
   self.chain.on('block', function (block) {
     if (block.height % 1000 === 0) {
@@ -96,7 +101,7 @@ function SimpleBlockStream (opts) {
       }
     })
 
-    var blockStream = self.peers.createBlockStream({ filtered: true })
+    var blockStream = self.peers.createBlockStream({ filtered: self.filtered })
 
     var serializer = mapStream(function (block, cb) {
       cb(null, blockToJson(block))

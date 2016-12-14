@@ -13,7 +13,8 @@ This library uses [debug](https://github.com/visionmedia/debug); set the env var
 Options:
 
 - `db` (required): a LevelUp database
-- `addresses`: an array of addresses to watch (default `[]`)
+- `addresses`: an array of addresses to include (default `[]`)
+- `unfiltered`: if true, include all addresses (default `false`)
 - `from`: include blocks starting at this height (default `0`)
 - `params`: the params of the blockchain (default Bitcoin mainnet)
 - `network`: the network of the blockchain (default Bitcoin mainnet)
