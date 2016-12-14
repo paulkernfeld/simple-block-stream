@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+var assert = require('assert')
+var fs = require('fs')
+
+var JsonStream = require('JSONStream')
+var mapStream = require('map-stream')
+var memdb = require('memdb')
+var argv = require('minimist')(process.argv.slice(2))
+var pump = require('pump')
+
+var SimpleBlockStream = require('.')
+
+assert (typeof argv.outputPath === 'string')
+assert (typeof argv.fixtureHeight === 'number')
+
+argv.db = memdb()
+argv.json = true
+argv.addresses = argv._
+var sbs = SimpleBlockStream(argv)
+
+var checker = mapStream(function (block, cb) {
+  if (block.height <= argv.fixtureHeight) {
+    cb(null, block)
+  } else {
+    cb()
+    sbs.stream.end()
+  }
+})
+
+var fileWrite = fs.createWriteStream(argv.outputPath)
+
+pump(sbs.stream, checker, JsonStream.stringify(), fileWrite, function (err) {
+  assert.ifError(err)
+  console.log('Finished.')
+  process.nextTick(function () {
+    process.exit()
+  })
+})
