@@ -6,7 +6,7 @@
   "scripts": {
     "pretest": "rm -rf test.db",
     "posttest": "rm -rf test.db",
-    "test": "standard && tape test/test-read-from-fixture.js && tape test/test-memdb.js && tape test/test-write-fixture.js && tape test/test-read-fixture.js"
+    "test": "standard && tape test/test-read-from-fixture.js && tape test/test-memdb.js && tape test/test-write-db.js && tape test/test-read-db.js"
   },
   "bin": {
     "make-fixture": "./make-fixture"
