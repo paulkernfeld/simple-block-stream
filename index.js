@@ -1,5 +1,6 @@
 var assert = require('assert')
 var EventEmitter = require('events')
+var fs = require('fs')
 
 var Filter = require('bitcoin-filter')
 var PeerGroup = require('bitcoin-net').PeerGroup
@@ -8,6 +9,7 @@ var Blockchain = require('blockchain-spv')
 var CacheLiveStream = require('cache-live-stream')
 var debug = require('debug')('simple-block-stream')
 var inherits = require('inherits')
+var JsonStream = require('JSONStream')
 var mapStream = require('map-stream')
 var assign = require('object-assign')
 var pump = require('pump')
@@ -169,6 +171,16 @@ SimpleBlockStream.prototype.filterElements = function () {
   return this.pubkeyHashes
 }
 
+var fromFixture = function (opts) {
+  var deserializer = mapStream(function (block, cb) {
+    cb(null, blockFromJson(block))
+  })
+  var readFromFile = fs.createReadStream(opts.inputPath)
+
+  return pump(readFromFile, JsonStream.parse('*'), deserializer)
+}
+
 module.exports = SimpleBlockStream
 module.exports.blockToJson = blockToJson
 module.exports.blockFromJson = blockFromJson
+module.exports.fromFixture = fromFixture
