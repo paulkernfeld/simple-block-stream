@@ -187,4 +187,5 @@ var fromFixture = function (opts) {
 module.exports = SimpleBlockStream
 module.exports.blockToJson = blockToJson
 module.exports.blockFromJson = blockFromJson
+module.exports.blockFromObject = blockFromObject
 module.exports.fromFixture = fromFixture
