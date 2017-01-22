@@ -172,8 +172,9 @@ SimpleBlockStream.prototype.filterElements = function () {
 }
 
 var fromFixture = function (opts) {
+  var deserialize = opts.deserialize || blockFromJson
   var deserializer = mapStream(function (block, cb) {
-    cb(null, blockFromJson(block))
+    cb(null, deserialize(block))
   })
   var readFromFile = fs.createReadStream(opts.inputPath)
 
