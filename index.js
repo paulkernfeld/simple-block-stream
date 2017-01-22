@@ -177,7 +177,10 @@ var fromFixture = function (opts) {
   })
   var readFromFile = fs.createReadStream(opts.inputPath)
 
-  return pump(readFromFile, JsonStream.parse('*'), deserializer)
+  // TODO: make the user use sbs.stream, not sbs
+  var sbs = pump(readFromFile, JsonStream.parse('*'), deserializer)
+  sbs.stream = sbs
+  return sbs
 }
 
 module.exports = SimpleBlockStream

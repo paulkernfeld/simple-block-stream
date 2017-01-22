@@ -47,9 +47,9 @@ Use the `make-fixture` binary to save a fixture:
 
 `make-fixture --outputPath fixture.json --fixtureHeight 1000`
 
-Use the `fromFixture` method to read a fixture out. The fixture acts just like `SimpleBlockStream.stream`.
+Use the `fromFixture` method to read a fixture out. The fixture acts just like a `SimpleBlockStream`.
 
 ```js
 var SimpleBlockStream = require('simple-block-stream')
-SimpleBlockStream.fromFixture({inputPath: 'fixture.json'}).on('data', console.log)
+SimpleBlockStream.fromFixture({inputPath: 'fixture.json'}).stream.on('data', console.log)
 ```
