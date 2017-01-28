@@ -21,26 +21,26 @@
   "dependencies": {
     "bitcoin-filter": "^0.1.4",
     "bitcoin-net": "^4.5.0",
-    "bitcoinjs-lib": "^2.2.0",
-    "blockchain-spv": "^3.1.1",
-    "cache-live-stream": "^0.1.5",
-    "debug": "^2.3.3",
-    "inherits": "^2.0.1",
+    "bitcoinjs-lib": "^2.3.0",
+    "blockchain-spv": "^3.1.3",
+    "cache-live-stream": "^0.2.0",
+    "debug": "^2.6.0",
+    "inherits": "^2.0.3",
     "map-stream": "0.0.6",
-    "object-assign": "^4.1.0",
-    "pump": "^1.0.1",
+    "object-assign": "^4.1.1",
+    "pump": "^1.0.2",
     "subleveldown": "^2.1.0",
-    "webcoin-bitcoin": "^3.0.0"
+    "webcoin-bitcoin": "^3.1.4"
   },
   "devDependencies": {
-    "JSONStream": "^1.2.1",
-    "bitcoin-util": "^2.0.0",
+    "JSONStream": "^1.3.0",
+    "bitcoin-util": "^2.0.3",
     "buffer-reverse": "^1.0.1",
     "level": "^1.5.0",
     "memdb": "^1.3.1",
     "minimist": "^1.2.0",
     "standard": "^8.6.0",
     "stream-to-array": "^2.3.0",
-    "tape": "^4.6.2"
+    "tape": "^4.6.3"
   }
 }
