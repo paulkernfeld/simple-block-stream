@@ -1,6 +1,7 @@
 var assert = require('assert')
 var EventEmitter = require('events')
 var fs = require('fs')
+var Readable = require('stream').Readable
 
 var Filter = require('bitcoin-filter')
 var PeerGroup = require('bitcoin-net').PeerGroup
@@ -118,6 +119,13 @@ function SimpleBlockStream (opts) {
     var fromHash
     var fromHeight
 
+    if (self.closed) {
+      // Return a stream that closes immediately
+      var rs = new Readable()
+      rs.push(null)
+      return cb(null, rs)
+    }
+
     if (latestCached) {
       // Start after the latest item in the cache
       fromHash = Buffer.from(latestCached.header.getHash())
@@ -169,6 +177,17 @@ inherits(SimpleBlockStream, EventEmitter)
 // Implement the Filterable interface for the bitcoin-filter package.
 SimpleBlockStream.prototype.filterElements = function () {
   return this.pubkeyHashes
+}
+
+SimpleBlockStream.prototype.close = function (cb) {
+  var self = this
+  debug('closing...')
+  // TODO PeerGroup's close method is a bit off... see https://github.com/mappum/bitcoin-net/issues/131
+  this.peers.close(function (err) {
+    self.closed = true
+    debug('closed')
+    cb(err)
+  })
 }
 
 var fromFixture = function (opts) {

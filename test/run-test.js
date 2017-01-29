@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-var timers = require('timers')
-
 var bitcoin = require('bitcoinjs-lib')
 var reverse = require('buffer-reverse')
 var mapStream = require('map-stream')
@@ -11,13 +9,6 @@ var SimpleBlockStream = require('..')
 
 module.exports = function (opts) {
   tape(opts.name, function (t) {
-    t.timeoutAfter(30000)
-
-    // TODO this is a hack because I haven't written a close method yet
-    t.on('end', function () {
-      timers.setImmediate(process.exit)
-    })
-
     var sbs = SimpleBlockStream(opts.sbsOpts)
     var seenFirstTx = false
 
@@ -38,7 +29,9 @@ module.exports = function (opts) {
           if (bitcoin.script.isPubKeyHashInput(input.script)) {
             var pubkeyHash = bitcoin.crypto.hash160(bitcoin.script.decompile(input.script)[1])
             t.same(pubkeyHash, bitcoin.address.fromBase58Check(opts.firstInputAddress).hash)
-            t.end()
+            sbs.close(function (err) {
+              t.end(err)
+            })
           } else {
             t.fail()
           }

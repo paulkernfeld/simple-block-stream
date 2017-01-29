@@ -39,6 +39,8 @@ sbs.stream.on('data', function (block) {
 })
 ```
 
+Call `sbs.close` when you're done.
+
 ## Fixtures
 
 You can use fixtures to make your unit tests fast and reliable.
@@ -47,7 +49,8 @@ Use the `make-fixture` binary to save a fixture:
 
 `make-fixture --outputPath fixture.json --fixtureHeight 1000`
 
-Use the `fromFixture` method to read a fixture out. The fixture acts just like a `SimpleBlockStream`.
+Use the `fromFixture` method to read a fixture out. The fixture acts just like a `SimpleBlockStream`, except that it
+closes after whole fixture is done.
 
 ```js
 var SimpleBlockStream = require('simple-block-stream')
