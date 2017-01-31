@@ -180,6 +180,8 @@ SimpleBlockStream.prototype.filterElements = function () {
 }
 
 SimpleBlockStream.prototype.close = function (cb) {
+  cb = cb || function () {}
+
   var self = this
   debug('closing...')
   // TODO PeerGroup's close method is a bit off... see https://github.com/mappum/bitcoin-net/issues/131
