@@ -19,6 +19,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "JSONStream": "^1.3.0",
     "bitcoin-filter": "^0.1.4",
     "bitcoin-net": "^4.5.0",
     "bitcoinjs-lib": "^2.3.0",
@@ -28,17 +29,16 @@
     "inherits": "^2.0.3",
     "level": "^1.6.0",
     "map-stream": "0.0.6",
+    "memdb": "^1.3.1",
+    "minimist": "^1.2.0",
     "object-assign": "^4.1.1",
     "pump": "^1.0.2",
     "subleveldown": "^2.1.0",
     "webcoin-bitcoin": "^3.1.4"
   },
   "devDependencies": {
-    "JSONStream": "^1.3.0",
     "bitcoin-util": "^2.0.3",
     "buffer-reverse": "^1.0.1",
-    "memdb": "^1.3.1",
-    "minimist": "^1.2.0",
     "standard": "^8.6.0",
     "stream-to-array": "^2.3.0",
     "tape": "^4.6.3"
