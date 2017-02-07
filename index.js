@@ -128,6 +128,7 @@ function SimpleBlockStream (opts) {
 
     if (latestCached) {
       // Start after the latest item in the cache
+      console.log(latestCached.header)
       fromHash = Buffer.from(latestCached.header.getHash())
       fromHeight = latestCached.height
     } else {

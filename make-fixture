@@ -3,6 +3,7 @@ var assert = require('assert')
 var fs = require('fs')
 
 var JsonStream = require('JSONStream')
+var level = require('level')
 var mapStream = require('map-stream')
 var memdb = require('memdb')
 var argv = require('minimist')(process.argv.slice(2))
@@ -13,7 +14,12 @@ var SimpleBlockStream = require('.')
 assert (typeof argv.outputPath === 'string')
 assert (typeof argv.fixtureHeight === 'number')
 
-argv.db = memdb()
+if (argv.dbPath) {
+  argv.db = level(argv.dbPath)
+} else {
+  argv.db = memdb()
+}
+
 argv.json = true
 argv.addresses = argv._
 var sbs = SimpleBlockStream(argv)
